@@ -3,13 +3,11 @@ Funcion correcto <- ValidarCedula ( cedula )
 	Definir i, suma, digito, provincia, tercerDigito Como Entero
 	Definir digitoVerificador, ultimoDigito Como Entero
 	
-	// En el perfil Flexible es vital asegurar el estado inicial
 	correcto <- Verdadero
 	
 	Si Longitud(cedula) <> 10 Entonces
 		correcto <- Falso
 	Sino
-		// Validar que sean solo números (Índices del 1 al 10 para Modo Flexible)
 		Para i <- 1 Hasta 10 Con Paso 1 Hacer
 			Si Subcadena(cedula, i, i) < "0" O Subcadena(cedula, i, i) > "9" Entonces
 				correcto <- Falso
@@ -17,7 +15,6 @@ Funcion correcto <- ValidarCedula ( cedula )
 		FinPara
 		
 		Si correcto = Verdadero Entonces
-			// En modo Flexible, la subcadena empieza en 1
 			provincia <- ConvertirANumero(Subcadena(cedula, 1, 2))
 			tercerDigito <- ConvertirANumero(Subcadena(cedula, 3, 3))
 			
@@ -25,11 +22,9 @@ Funcion correcto <- ValidarCedula ( cedula )
 				correcto <- Falso
 			Sino
 				suma <- 0
-				// Multiplicaciones posicionales (Del 1 al 9)
 				Para i <- 1 Hasta 9 Con Paso 1 Hacer
 					digito <- ConvertirANumero(Subcadena(cedula, i, i))
 					
-					// En Base 1, los multiplicadores por 2 caen en posiciones impares (1, 3, 5, 7, 9)
 					Si i % 2 <> 0 Entonces
 						digito <- digito * 2
 						Si digito > 9 Entonces 
