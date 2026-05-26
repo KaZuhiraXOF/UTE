@@ -3,37 +3,43 @@ Funcion correcto <- ValidarCedula ( cedula )
 	Definir i, suma, digito, provincia, tercerDigito Como Entero
 	Definir digitoVerificador, ultimoDigito Como Entero
 	
+	// En el perfil Flexible es vital asegurar el estado inicial
 	correcto <- Verdadero
 	
 	Si Longitud(cedula) <> 10 Entonces
 		correcto <- Falso
 	Sino
-		Para i <- 0 Hasta 9 Con Paso 1 Hacer
+		// Validar que sean solo números (Índices del 1 al 10 para Modo Flexible)
+		Para i <- 1 Hasta 10 Con Paso 1 Hacer
 			Si Subcadena(cedula, i, i) < "0" O Subcadena(cedula, i, i) > "9" Entonces
 				correcto <- Falso
 			FinSi
 		FinPara
+		
 		Si correcto = Verdadero Entonces
-			provincia <- ConvertirANumero(Subcadena(cedula, 0, 1))
-			tercerDigito <- ConvertirANumero(Subcadena(cedula, 2, 2))
+			// En modo Flexible, la subcadena empieza en 1
+			provincia <- ConvertirANumero(Subcadena(cedula, 1, 2))
+			tercerDigito <- ConvertirANumero(Subcadena(cedula, 3, 3))
 			
 			Si (provincia < 1 O provincia > 24) Y provincia <> 30 O tercerDigito > 5 Entonces
 				correcto <- Falso
 			Sino
 				suma <- 0
-				Para i <- 0 Hasta 8 Con Paso 1 Hacer
+				// Multiplicaciones posicionales (Del 1 al 9)
+				Para i <- 1 Hasta 9 Con Paso 1 Hacer
 					digito <- ConvertirANumero(Subcadena(cedula, i, i))
 					
-					Si i % 2 = 0 Entonces
+					// En Base 1, los multiplicadores por 2 caen en posiciones impares (1, 3, 5, 7, 9)
+					Si i % 2 <> 0 Entonces
 						digito <- digito * 2
-						Si digito > 9 Entonces
+						Si digito > 9 Entonces 
 							digito <- digito - 9
 						FinSi
 					FinSi
-					
 					suma <- suma + digito
 				FinPara
-				ultimoDigito <- ConvertirANumero(Subcadena(cedula, 9, 9))
+				
+				ultimoDigito <- ConvertirANumero(Subcadena(cedula, 10, 10))
 				digitoVerificador <- (10 - (suma % 10)) % 10
 				
 				Si digitoVerificador <> ultimoDigito Entonces
@@ -223,6 +229,7 @@ Proceso DulceTentacion_Kiosko
 					"4":
 						Borrar Pantalla
 						Si facturaTotal > 0 Entonces
+							// Selección del tipo de documento
 							Escribir "=========================================="
 							Escribir "          TIPO DE FACTURACIÓN             "
 							Escribir "=========================================="
@@ -302,10 +309,10 @@ Proceso DulceTentacion_Kiosko
 								Escribir "¡Pago recibido con éxito! Retira tu ticket de compra."
 								facturaTotal <- 0; cPanQueso <- 0; cEnrollado <- 0; cCroissant <- 0
 								cCafe <- 0; cJugo <- 0; cChocolate <- 0; cTorta <- 0
-								opciones <- "5"
+								opciones <- "5" // Sale al menú de bienvenida
 							Sino
 								Escribir "Orden mantenida. Regresando al menú de categorías..."
-								opciones <- "0" 
+								opciones <- "0" // Mantiene al usuario dentro del menú de compras
 							FinSi
 							Escribir "Presiona una tecla para continuar..."
 							Esperar Tecla
