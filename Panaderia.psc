@@ -55,10 +55,25 @@ Proceso DulceTentacion_Kiosko
 	Definir opFactura, nombreCliente, cedulaRuc Como Caracter
 	Definir cedulaValida Como Logico
 	
+	Definir opMetodoPago, continuarPago Como Caracter
+	Definir pagoCompletado Como Logico
+	
+	Definir claveIngresada, claveCorrecta, opDueno Como Caracter
+	Definir totPanQueso, totEnrollado, totCroissant, totCafe, totJugo, totChocolate, totTorta Como Entero
+	Definir cajaEfectivo, cajaTarjeta, cajaTransferencia, cajaTotalGeneral Como Real
+	
 	facturaTotal <- 0
 	cPanQueso <- 0; cEnrollado <- 0; cCroissant <- 0
 	cCafe <- 0; cJugo <- 0; cChocolate <- 0; cTorta <- 0
+	
 	stockPanQueso <- 50; stockEnrollado <- 100; stockCroissant <- 40
+	
+	totPanQueso <- 0; totEnrollado <- 0; totCroissant <- 0
+	totCafe <- 0; totJugo <- 0; totChocolate <- 0; totTorta <- 0
+	cajaEfectivo <- 0; cajaTarjeta <- 0; cajaTransferencia <- 0; cajaTotalGeneral <- 0
+	claveCorrecta <- "admin123" 
+	
+	opciones <- "0"
 	
 	Repetir
 		Borrar Pantalla
@@ -68,8 +83,9 @@ Proceso DulceTentacion_Kiosko
 		Escribir "== PORQUE SIEMPRE TENDRÁS GANAS DE MÁS =="
 		Escribir "=========================================="
 		Escribir "============== BIENVENIDO ================"
-		Escribir "1. INGRESAR"
+		Escribir "1. INGRESAR A LA TIENDA"
 		Escribir "2. SALIR DEL SISTEMA"
+		Escribir "------------------------------------------"
 		Escribir "DIGÍTA EL NÚMERO DE LA OPCIÓN QUE DESEAS"
 		Leer opcion_inicial
 		
@@ -96,9 +112,9 @@ Proceso DulceTentacion_Kiosko
 						Repetir
 							Borrar Pantalla
 							Escribir "********* MENU DE PANES *********"
-							Escribir "1. Pan de Queso_____________$1.00"
-							Escribir "2. Pan Enrollado____________$0.15"
-							Escribir "3. Pan Cachito______________$0.50"
+							Escribir "1. Pan de Queso (Stock: ", stockPanQueso, ")_____$1.00"
+							Escribir "2. Pan Enrollado (Stock: ", stockEnrollado, ")____$0.15"
+							Escribir "3. Pan Cachito (Stock: ", stockCroissant, ")______$0.50"
 							Escribir "4. VOLVER"
 							Escribir "Ingresa la opción:"
 							Leer opPan
@@ -106,29 +122,49 @@ Proceso DulceTentacion_Kiosko
 							Si opPan >= "1" Y opPan <= "3" Entonces
 								Escribir "Cantidad:"
 								Leer numeroPedidos
-								Segun opPan Hacer
-									"1":
-										subtotal <- numeroPedidos * 1.00
-										cPanQueso <- cPanQueso + numeroPedidos
-									"2":
-										subtotal <- numeroPedidos * 0.15
-										cEnrollado <- cEnrollado + numeroPedidos
-									"3":
-										subtotal <- numeroPedidos * 0.50
-										cCroissant <- cCroissant + numeroPedidos
-								Fin Segun
 								
-								facturaTotal <- facturaTotal + subtotal
-								Escribir "¡Excelente elección! Tu saldo actual es de: $", facturaTotal
-								Escribir "¿Desea ir directo a pagar su orden? (S/N)"
-								Leer irAPagar
+								Definir stockDisponible Como Logico
+								stockDisponible <- Verdadero
 								
-								Si irAPagar = "s" O irAPagar = "S" Entonces
-									opPan <- "4"   
-									opciones <- "4" 
-								Sino
-									Escribir "Presiona cualquier tecla para seguir pidiendo..."
+								Si opPan = "1" Y numeroPedidos > stockPanQueso Entonces
+									stockDisponible <- Falso 
+								FinSi
+								Si opPan = "2" Y numeroPedidos > stockEnrollado Entonces
+									stockDisponible <- Falso
+								FinSi
+								Si opPan = "3" Y numeroPedidos > stockCroissant Entonces
+									stockDisponible <- Falso 
+								FinSi
+								
+								Si stockDisponible = Falso Entonces
+									Escribir "¡Lo sentimos! No contamos con suficiente stock para esa cantidad."
+									Escribir "Presione una tecla para continuar..."
 									Esperar Tecla
+								Sino
+									Segun opPan Hacer
+										"1":
+											subtotal <- numeroPedidos * 1.00
+											cPanQueso <- cPanQueso + numeroPedidos
+										"2":
+											subtotal <- numeroPedidos * 0.15
+											cEnrollado <- cEnrollado + numeroPedidos
+										"3":
+											subtotal <- numeroPedidos * 0.50
+											cCroissant <- cCroissant + numeroPedidos
+									Fin Segun
+									
+									facturaTotal <- facturaTotal + subtotal
+									Escribir "¡Excelente elección! Tu saldo actual es de: $", facturaTotal
+									Escribir "¿Desea ir directo a pagar su orden? (S/N)"
+									Leer irAPagar
+									
+									Si irAPagar = "s" O irAPagar = "S" Entonces
+										opPan <- "4"   
+										opciones <- "4" 
+									Sino
+										Escribir "Presiona cualquier tecla para seguir pidiendo..."
+										Esperar Tecla
+									FinSi
 								FinSi
 							Sino
 								Si opPan <> "4" Entonces
@@ -224,9 +260,8 @@ Proceso DulceTentacion_Kiosko
 					"4":
 						Borrar Pantalla
 						Si facturaTotal > 0 Entonces
-							// Selección del tipo de documento
 							Escribir "=========================================="
-							Escribir "          TIPO DE FACTURACIÓN             "
+							Escribir "            TIPO DE FACTURACIÓN           "
 							Escribir "=========================================="
 							Escribir "1. CONSUMIDOR FINAL"
 							Escribir "2. CON DATOS"
@@ -242,7 +277,7 @@ Proceso DulceTentacion_Kiosko
 									Leer cedulaRuc
 									cedulaValida <- ValidarCedula(cedulaRuc)
 									
-									Si No cedulaValida Entonces
+									Si cedulaValida = Falso Entonces
 										Escribir "¡Error! La cédula es incorrecta o contiene caracteres no permitidos."
 										Escribir "Inténtelo de nuevo."
 										Escribir "------------------------------------------"
@@ -301,13 +336,74 @@ Proceso DulceTentacion_Kiosko
 							Leer confirmacion
 							
 							Si confirmacion = "s" O confirmacion = "S" Entonces
-								Escribir "¡Pago recibido con éxito! Retira tu ticket de compra."
-								facturaTotal <- 0; cPanQueso <- 0; cEnrollado <- 0; cCroissant <- 0
-								cCafe <- 0; cJugo <- 0; cChocolate <- 0; cTorta <- 0
-								opciones <- "5" // Sale al menú de bienvenida
+								pagoCompletado <- Falso
+								Repetir
+									Borrar Pantalla
+									Escribir "=========================================="
+									Escribir "          SELECCIONE FORMA DE PAGO        "
+									Escribir "=========================================="
+									Escribir " VALOR A PAGAR: $", totalConDescuento
+									Escribir "------------------------------------------"
+									Escribir "1. Efectivo"
+									Escribir "2. Tarjeta de Crédito"
+									Escribir "3. Transferencia / De Una"
+									Escribir "4. CANCELAR PROCESO DE PAGO"
+									Escribir "=========================================="
+									Escribir "Ingrese una opción:"
+									Leer opMetodoPago
+									
+									Segun opMetodoPago Hacer
+										"1":
+											Escribir "Procesando pago en Efectivo..."
+											cajaEfectivo <- cajaEfectivo + totalConDescuento
+											pagoCompletado <- Verdadero
+										"2":
+											Escribir "Por favor, pase la tarjeta..."
+											cajaTarjeta <- cajaTarjeta + totalConDescuento
+											pagoCompletado <- Verdadero
+										"3":
+											Escribir "Mostrando código QR..."
+											cajaTransferencia <- cajaTransferencia + totalConDescuento
+											pagoCompletado <- Verdadero
+										"4":
+											Escribir "¿Está seguro que desea cancelar el pago? (S/N)"
+											Leer continuarPago
+											Si continuarPago = "s" O continuarPago = "S" Entonces
+												pagoCompletado <- Verdadero 
+												confirmacion <- "N" 
+											FinSi
+										De Otro Modo:
+											Escribir "Opción inválida. Intente nuevamente."
+											Esperar Tecla
+									FinSegun
+								Hasta Que pagoCompletado = Verdadero
+								
+								Si confirmacion = "s" O confirmacion = "S" Entonces
+									stockPanQueso <- stockPanQueso - cPanQueso
+									stockEnrollado <- stockEnrollado - cEnrollado
+									stockCroissant <- stockCroissant - cCroissant
+									
+									totPanQueso <- totPanQueso + cPanQueso
+									totEnrollado <- totEnrollado + cEnrollado
+									totCroissant <- totCroissant + cCroissant
+									totCafe <- totCafe + cCafe
+									totJugo <- totJugo + cJugo
+									totChocolate <- totChocolate + cChocolate
+									totTorta <- totTorta + cTorta
+									
+									cajaTotalGeneral <- cajaTotalGeneral + totalConDescuento
+									
+									Escribir "¡Pago recibido con éxito! Retira tu ticket de compra."
+									facturaTotal <- 0; cPanQueso <- 0; cEnrollado <- 0; cCroissant <- 0
+									cCafe <- 0; cJugo <- 0; cChocolate <- 0; cTorta <- 0
+									opciones <- "5" 
+								Sino
+									Escribir "Pago cancelado. Volviendo al menú de categorías..."
+									opciones <- "0"
+								FinSi
 							Sino
 								Escribir "Orden mantenida. Regresando al menú de categorías..."
-								opciones <- "0" // Mantiene al usuario dentro del menú de compras
+								opciones <- "0" 
 							FinSi
 							Escribir "Presiona una tecla para continuar..."
 							Esperar Tecla
@@ -337,27 +433,98 @@ Proceso DulceTentacion_Kiosko
 						opciones <- "0"
 				Fin Segun
 			Hasta Que opciones = "5"
+			
 		Sino
-			Si opcion_inicial <> "2" Entonces
-				Escribir "¡Ups! Opción no válida. Intenta con los números del menú (1 o 2)."
-				Escribir "Presiona una tecla para reintentar..."
-				Esperar Tecla
-			Sino
-				Si facturaTotal > 0 Entonces
-					Escribir "¡Espera! Tienes productos en el carrito. ¿Realmente quieres salir del sistema? (S/N)"
-					Leer confirmacion
-					Si confirmacion = "n" O confirmacion = "N" Entonces
-						opcion_inicial <- "0"
-					FinSi
+			Si opcion_inicial = "admin" O opcion_inicial = "ADMIN" Entonces
+				Borrar Pantalla
+				Escribir "=========================================="
+				Escribir "       INGRESO AL MODO ADMINISTRADOR       "
+				Escribir "=========================================="
+				Escribir "Digite la clave de acceso:"
+				Leer claveIngresada
+				
+				Si claveIngresada = claveCorrecta Entonces
+					Repetir
+						Borrar Pantalla
+						Escribir "=========================================="
+						Escribir "         SISTEMA DE CONTROL - DUEÑO       "
+						Escribir "=========================================="
+						Escribir "1. REVISAR DINERO EN CAJA (INGRESOS)"
+						Escribir "2. REVISAR STOCK DISPONIBLE (INVENTARIO)"
+						Escribir "3. REVISAR HISTORIAL DE VENTAS DEL DÍA"
+						Escribir "4. VOLVER AL MENÚ PRINCIPAL"
+						Escribir "=========================================="
+						Escribir "Seleccione una opción:"
+						Leer opDueno
+						
+						Segun opDueno Hacer
+							"1":
+								Borrar Pantalla
+								Escribir "========= REPORTE DE CAJA ========="
+								Escribir "Efectivo Recaudado:     $", cajaEfectivo
+								Escribir "Tarjetas de Crédito:    $", cajaTarjeta
+								Escribir "Transferencias/De Una:  $", cajaTransferencia
+								Escribir "-----------------------------------"
+								Escribir "TOTAL RECAUDADO EN EL DÍA: $", cajaTotalGeneral
+								Escribir "==================================="
+								Escribir "Presione una tecla para regresar..."
+								Esperar Tecla
+							"2":
+								Borrar Pantalla
+								Escribir "====== STOCK RESTANTE EN VITRINA ======"
+								Escribir "Pan de Queso:   ", stockPanQueso, " unidades."
+								Escribir "Pan Enrollado:  ", stockEnrollado, " unidades."
+								Escribir "Pan Cachito:    ", stockCroissant, " unidades."
+								Escribir "======================================="
+								Escribir "Presione una tecla para regresar..."
+								Esperar Tecla
+							"3":
+								Borrar Pantalla
+								Escribir "====== UNIDADES VENDIDAS HOY ======"
+								Escribir "Pan de Queso:        ", totPanQueso
+								Escribir "Pan Enrollado:       ", totEnrollado
+								Escribir "Pan Cachito:         ", totCroissant
+								Escribir "Café Pasado:         ", totCafe
+								Escribir "Jugo Natural:        ", totJugo
+								Escribir "Chocolate Caliente:  ", totChocolate
+								Escribir "Porción de Torta:    ", totTorta
+								Escribir "==================================="
+								Escribir "Presione una tecla para regresar..."
+								Esperar Tecla
+							"4":
+								Escribir "Saliendo del modo Administrador..."
+							De Otro Modo:
+								Escribir "Opción no válida."
+								Esperar Tecla
+						FinSegun
+					Hasta Que opDueno = "4"
+				Sino
+					Escribir "¡Clave Incorrecta! Acceso denegado."
+					Escribir "Presione una tecla para continuar..."
+					Esperar Tecla
 				FinSi
-				Si opcion_inicial = "2" Entonces
-					Escribir "¡Gracias por visitarnos! Te esperamos pronto en Dulce Tentación Panadería."
-					Escribir "=========================================="
-					Escribir "======== PROGRAMA ELABORADO POR: ========="
-					Escribir "===== 1. RONALD GUALOTO =================="
-					Escribir "===== 2. DERECK MERA ====================="
-					Escribir "===== 3. MATEO ROGERON ==================="
-					Escribir "=========================================="
+			Sino
+				Si opcion_inicial <> "2" Entonces
+					Escribir "¡Ups! Opción no válida. Intenta con los números del menú (1 o 2)."
+					Escribir "Presiona una tecla para reintentar..."
+					Esperar Tecla
+				Sino
+					Si facturaTotal > 0 Entonces
+						Escribir "¡Espera! Tienes productos en el carrito. ¿Realmente quieres salir del sistema? (S/N)"
+						Leer confirmacion
+						Si confirmacion = "n" O confirmacion = "N" Entonces
+							opcion_inicial <- "0"
+						FinSi
+					FinSi
+					Si opcion_inicial = "2" Entonces
+						Escribir "¡Gracias por visitarnos! Te esperamos pronto en Dulce Tentación Panadería."
+						Escribir "=========================================="
+						Escribir "======== PROGRAMA ELABORADO POR: ========="
+						Escribir "===== 1. RONALD GUALOTO =================="
+						Escribir "===== 2. DERECK MERA ====================="
+						Escribir "===== 3. MATEO ROGERON ==================="
+						Escribir "=========================================="
+					FinSi
 				FinSi
 			FinSi
 		Fin Si
