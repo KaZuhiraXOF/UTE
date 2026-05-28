@@ -80,7 +80,7 @@ Proceso DulceTentacion_Kiosko
 	esqSupDer   <- "X"
 	esqInfIzq   <- "X"
 	esqInfDer   <- "X"
-	lineaH      <- "-"
+	lineaH      <- "="
 	lineaV      <- "|"
 	conectorIzq <- "|"
 	conectorDer <- "|"
@@ -203,7 +203,6 @@ Proceso DulceTentacion_Kiosko
 									Escribir "Cantidad:"
 									Leer numeroPedidos
 									
-									Definir stockDisponible Como Logico
 									stockDisponible <- Verdadero
 									
 									Si opPan = "1" Y numeroPedidos > stockPanQueso Entonces
@@ -465,13 +464,71 @@ Proceso DulceTentacion_Kiosko
 											Escribir " ??????????????????????????????????????????????????????"
 											Escribir " ?       ESCANEA EL CÓDIGO PARA PROCEDER AL PAGO      ?"
 											Escribir " ??????????????????????????????????????????????????????"
-											Escribir " ?                                                    ?"
-											Escribir " ?            ##  ######  ##    ##  ######            ?"
-											Escribir " ?            ##  ##  ##  ##    ##  ##  ##            ?"
-											Escribir " ?            ######  ##  ########  ######            ?"
-											Escribir " ?            ##  ######  ##    ##  ####              ?"
-											Escribir " ?            ##  ##  ##  ##    ##  ##  ##            ?"
-											Escribir " ?                                                    ?"
+											Definir dimension_qr, i, j Como Entero
+											dimension_qr <- 21 // Tamaño estándar de un QR Versión 1 (21x21)
+											
+											Definir matriz Como Entero
+											Dimension matriz[dimension_qr, dimension_qr]
+											
+											// 1. Inicializar la matriz vacía (0 = Blanco, 1 = Negro)
+											Para i <- 1 Hasta dimension_qr Con Paso 1 Hacer
+												Para j <- 1 Hasta dimension_qr Con Paso 1 Hacer
+													matriz[i, j] <- 0
+												FinPara
+											FinPara
+											
+											// 2. Llenar el resto del QR con datos aleatorios (Ruido visual)
+											Para i <- 1 Hasta dimension_qr Con Paso 1 Hacer
+												Para j <- 1 Hasta dimension_qr Con Paso 1 Hacer
+													Si Azar(2) = 1 Entonces
+														matriz[i, j] <- 1
+													FinSi
+												FinPara
+											FinPara
+											
+											Para i <- 1 Hasta 7 Hacer
+												Para j <- 1 Hasta 7 Hacer
+													Si i = 1 O i = 7 O j = 1 O j = 7 O (i >= 3 Y i <= 5 Y j >= 3 Y j <= 5) Entonces
+														matriz[i, j] <- 1
+													Sino
+														matriz[i, j] <- 0
+													FinSi
+												FinPara
+											FinPara
+											
+											Para i <- 1 Hasta 7 Hacer
+												Para j <- 15 Hasta 21 Hacer
+													Si i = 1 O i = 7 O j = 15 O j = 21 O (i >= 3 Y i <= 5 Y j >= 17 Y j <= 19) Entonces
+														matriz[i, j] <- 1
+													Sino
+														matriz[i, j] <- 0
+													FinSi
+												FinPara
+											FinPara
+											
+											Para i <- 15 Hasta 21 Hacer
+												Para j <- 1 Hasta 7 Hacer
+													Si i = 15 O i = 21 O j = 1 O j = 7 O (i >= 17 Y i <= 19 Y j >= 3 Y j <= 5) Entonces
+														matriz[i, j] <- 1
+													Sino
+														matriz[i, j] <- 0
+													FinSi
+												FinPara
+											FinPara
+											
+											//CODIGO QR PARA MOSTRAR EN PANTALLA (SIMULACION)
+											Para i <- 1 Hasta dimension_qr Con Paso 1 Hacer
+												linea <- ""
+												Para j <- 1 Hasta dimension_qr Con Paso 1 Hacer
+													Si matriz[i, j] = 1 Entonces
+														linea <- linea + "##" 
+													Sino
+														linea <- linea + "  " 
+													FinSi
+												FinPara
+												Escribir linea
+											FinPara
+											Escribir "--------------------------"
 											Escribir " ?         Monto a Transferir: $", totalConDescuento, "                 ?"
 											Escribir " ??????????????????????????????????????????????????????"
 											Escribir " Presione cualquier tecla una vez realizada la transferencia..."
