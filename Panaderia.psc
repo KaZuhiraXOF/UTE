@@ -75,18 +75,76 @@ Proceso DulceTentacion_Kiosko
 	
 	opciones <- "0"
 	
-	Repetir
+	//BLOQUE DEDICADO PARA LA CONSTRUCCIÓN DE LOS MENÚS XD
+	esqSupIzq   <- "X"
+	esqSupDer   <- "X"
+	esqInfIzq   <- "X"
+	esqInfDer   <- "X"
+	lineaH      <- "-"
+	lineaV      <- "|"
+	conectorIzq <- "|"
+	conectorDer <- "|"
+	bloque      <- "#"
+	
+	Borrar Pantalla
+	Escribir ""
+	Escribir "  Cargando interfaz de la tienda..."
+	barra <- ""
+	Para j <- 1 Hasta 20 Hacer
+		barra <- barra + bloque
 		Borrar Pantalla
-		Escribir "=========================================="
-		Escribir "======= DULCE TENTACIÓN - PANADERÍA ======"
-		Escribir "=========================================="
-		Escribir "== PORQUE SIEMPRE TENDRÁS GANAS DE MÁS =="
-		Escribir "=========================================="
-		Escribir "============== BIENVENIDO ================"
-		Escribir "1. INGRESAR A LA TIENDA"
-		Escribir "2. SALIR DEL SISTEMA"
-		Escribir "------------------------------------------"
-		Escribir "DIGÍTA EL NÚMERO DE LA OPCIÓN QUE DESEAS"
+		Escribir ""
+		Escribir "  Cargando interfaz de la tienda..."
+		Escribir "  [" + barra + "]"
+		Esperar 50 Milisegundos
+	FinPara
+	
+	//CREANDO LA OPCIÓN PARA DEFINIR LA LINEA HORIZONTAL DEL CÓDIGO
+	Definir bordeHorizontal, separadorHorizontal Como Caracter
+	Definir bordeHorizontalSuperior, bordeHorizontalInferior, lineaSeparadoraCentral Como Caracter
+	Definir k Como Entero
+	
+	bordeHorizontal <- ""
+	separadorHorizontal <- ""
+	
+	// Este bucle dibuja una línea horizontal de 56 caracteres de largo
+	Para k <- 1 Hasta 56 Hacer
+		bordeHorizontal <- bordeHorizontal + lineaH
+		separadorHorizontal <- separadorHorizontal + lineaH
+	FinPara
+	
+	bordeHorizontalSuperior <- esqSupIzq + bordeHorizontal + esqSupDer
+	bordeHorizontalInferior <- esqInfIzq + bordeHorizontal + esqInfDer
+	lineaSeparadoraCentral  <- conectorIzq + separadorHorizontal + conectorDer
+	//**********************************************************
+	Borrar Pantalla
+	Escribir ""
+	Escribir "  Cargando interfaz de la tienda..."
+	barra <- ""
+	Para j <- 1 Hasta 20 Hacer
+		barra <- barra + bloque
+		Borrar Pantalla
+		Escribir ""
+		Escribir "  Cargando interfaz de la tienda..."
+		Escribir "  [" + barra + "]"
+		Esperar 50 Milisegundos
+	FinPara
+	
+	Repetir
+		
+		Borrar Pantalla		
+		Escribir bordeHorizontalSuperior
+		Escribir lineaV, "               D U L C E  T E N T A C I Ó N             ", lineaV
+		Escribir lineaV, "                  - P A N A D E R Í A -                 ", lineaV
+		Escribir lineaSeparadoraCentral
+		Escribir lineaV, "           " "Porque siempre tendrás ganas de más" "          ", lineaV
+		Escribir lineaSeparadoraCentral
+		Escribir lineaV, "                                                        ", lineaV
+		Escribir lineaV, "    [1] > INGRESAR A LA TIENDA                          ", lineaV
+		Escribir lineaV, "    [2] X SALIR DEL SISTEMA                             ", lineaV
+		Escribir lineaV, "                                                        ", lineaV
+		Escribir bordeHorizontalInferior
+		Escribir " Seleccione una opción (1-2): " Sin Saltar
 		Leer opcion_inicial
 		
 		Si opcion_inicial = "1" Entonces
@@ -94,12 +152,20 @@ Proceso DulceTentacion_Kiosko
 			Repetir
 				Si opciones <> "4" Entonces
 					Borrar Pantalla
-					Escribir "======= MENU PRINCIPAL ======="
-					Escribir "1. Variedad de Panes"
-					Escribir "2. Bebidas Calientes/Frías"
-					Escribir "3. Postres y Tortas"
-					Escribir "4. GENERAR PAGO / RESUMEN"
-					Escribir "5. REGRESAR (Inicio)"
+					Escribir bordeHorizontalSuperior
+					Escribir lineaV, "               D U L C E  T E N T A C I Ó N             ", lineaV
+					Escribir lineaV, "                  - P A N A D E R Í A -                 ", lineaV
+					Escribir lineaSeparadoraCentral
+					Escribir lineaSeparadoraCentral
+					Escribir lineaV, "                M E N Ú  P R I N C I P A L              ", lineaV
+					Escribir lineaSeparadoraCentral
+					Escribir lineaSeparadoraCentral
+					Escribir lineaV, "                                                        ", lineaV
+					Escribir lineaV, "    [1] > INGRESAR A LA TIENDA                          ", lineaV
+					Escribir lineaV, "    [2] X SALIR DEL SISTEMA                             ", lineaV
+					Escribir lineaV, "                                                        ", lineaV
+					
+					
 					Escribir "=============================="
 					Escribir " SALDO ACTUAL: $", facturaTotal
 					Escribir "=============================="
