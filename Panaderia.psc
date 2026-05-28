@@ -159,17 +159,23 @@ Proceso DulceTentacion_Kiosko
 					Escribir lineaSeparadoraCentral
 					Escribir lineaV, "                M E N Ú  P R I N C I P A L              ", lineaV
 					Escribir lineaSeparadoraCentral
+					Escribir lineaV, "                                                        ", lineaV
+					Escribir lineaV, "    [1] > NUESTRA VARIEDAD DE PANES                     ", lineaV
+					Escribir lineaV, "    [2] > BEBIDAS CALIENTES/FRÍAS                       ", lineaV
+					Escribir lineaV, "    [3] > POSTRES                                       ", lineaV
+					Escribir lineaV, "    [4] > GENERAR PAGO / FACTURA                        ", lineaV
+					Escribir lineaV, "    [5] X SALIR                                         ", lineaV
+					Escribir lineaV, "                                                        ", lineaV
 					Escribir lineaSeparadoraCentral
-					Escribir lineaV, "                                                        ", lineaV
-					Escribir lineaV, "    [1] > INGRESAR A LA TIENDA                          ", lineaV
-					Escribir lineaV, "    [2] X SALIR DEL SISTEMA                             ", lineaV
-					Escribir lineaV, "                                                        ", lineaV
-					
-					
-					Escribir "=============================="
-					Escribir " SALDO ACTUAL: $", facturaTotal
-					Escribir "=============================="
-					Escribir "Seleccione una categoria:"
+					textoSaldo <- "    SALDO ACTUAL: $" + ConvertirATexto(facturaTotal)
+					largoTexto <- Longitud(textoSaldo)
+					espaciosNecesarios <- 56 - largoTexto
+					Para m <- 1 Hasta espaciosNecesarios Con Paso 1 Hacer
+						textoSaldo <- textoSaldo + " "
+					FinPara
+					Escribir lineaV, textoSaldo, lineaV
+					Escribir bordeHorizontalInferior
+					Escribir " Seleccione una categoría: " Sin Saltar
 					Leer opciones
 				FinSi
 				
@@ -233,7 +239,7 @@ Proceso DulceTentacion_Kiosko
 									FinSi
 								FinSi
 							Sino
-								Si opPan <> "4" Entonces
+								Si opPan > "4" Entonces
 									Escribir "¡Ups! Esa opción no la tenemos. Intenta con los números del menú."
 									Escribir "Presiona una tecla para reintentar..."
 									Esperar Tecla
