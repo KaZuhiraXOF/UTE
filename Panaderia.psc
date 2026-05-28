@@ -183,124 +183,140 @@ Proceso DulceTentacion_Kiosko
 					"1":
 						Repetir
 							Borrar Pantalla
-							Escribir "********* MENU DE PANES *********"
-							Escribir "1. Pan de Queso (Stock: ", stockPanQueso, ")_____$1.00"
-							Escribir "2. Pan Enrollado (Stock: ", stockEnrollado, ")____$0.15"
-							Escribir "3. Pan Cachito (Stock: ", stockCroissant, ")______$0.50"
-							Escribir "4. VOLVER"
-							Escribir "Ingresa la opción:"
+							Escribir bordeHorizontalSuperior
+							Escribir lineaV, "                 M E N Ú  D E  P A N E S                ", lineaV
+							Escribir lineaSeparadoraCentral
+							Escribir lineaV, "                                                        ", lineaV
+							Escribir lineaV, "    [1] > Pan de Queso (Disponible: ", stockPanQueso, ")      $1.00      ", lineaV 
+							Escribir lineaV, "    [2] > Pan Enrollado (Disponible: ", stockEnrollado, ")   $0.15       ", lineaV
+							Escribir lineaV, "    [3] > Pan Cachito (Disponible: ", stockCroissant, ")     $0.50        ", lineaV
+							Escribir lineaV, "    [4] < VOLVER AL MENÚ PRINCIPAL                      ", lineaV
+							Escribir lineaV, "                                                        ", lineaV
+							Escribir bordeHorizontalInferior
+							Escribir " Ingresa la opción: " Sin Saltar
 							Leer opPan
 							
-							Si opPan >= "1" Y opPan <= "3" Entonces
-								Escribir "Cantidad:"
-								Leer numeroPedidos
-								
-								Definir stockDisponible Como Logico
-								stockDisponible <- Verdadero
-								
-								Si opPan = "1" Y numeroPedidos > stockPanQueso Entonces
-									stockDisponible <- Falso 
-								FinSi
-								Si opPan = "2" Y numeroPedidos > stockEnrollado Entonces
-									stockDisponible <- Falso
-								FinSi
-								Si opPan = "3" Y numeroPedidos > stockCroissant Entonces
-									stockDisponible <- Falso 
-								FinSi
-								
-								Si stockDisponible = Falso Entonces
-									Escribir "¡Lo sentimos! No contamos con suficiente stock para esa cantidad."
-									Escribir "Presione una tecla para continuar..."
-									Esperar Tecla
-								Sino
-									Segun opPan Hacer
-										"1":
-											subtotal <- numeroPedidos * 1.00
-											cPanQueso <- cPanQueso + numeroPedidos
-										"2":
-											subtotal <- numeroPedidos * 0.15
-											cEnrollado <- cEnrollado + numeroPedidos
-										"3":
-											subtotal <- numeroPedidos * 0.50
-											cCroissant <- cCroissant + numeroPedidos
-									Fin Segun
+							Segun opPan Hacer
+								"1", "2", "3":
+									Escribir "Cantidad:"
+									Leer numeroPedidos
 									
-									facturaTotal <- facturaTotal + subtotal
-									Escribir "¡Excelente elección! Tu saldo actual es de: $", facturaTotal
-									Escribir "¿Desea ir directo a pagar su orden? (S/N)"
-									Leer irAPagar
+									Definir stockDisponible Como Logico
+									stockDisponible <- Verdadero
 									
-									Si irAPagar = "s" O irAPagar = "S" Entonces
-										opPan <- "4"   
-										opciones <- "4" 
-									Sino
-										Escribir "Presiona cualquier tecla para seguir pidiendo..."
-										Esperar Tecla
+									Si opPan = "1" Y numeroPedidos > stockPanQueso Entonces
+										stockDisponible <- Falso 
 									FinSi
-								FinSi
-							Sino
-								Si opPan > "4" Entonces
+									Si opPan = "2" Y numeroPedidos > stockEnrollado Entonces
+										stockDisponible <- Falso
+									FinSi
+									Si opPan = "3" Y numeroPedidos > stockCroissant Entonces
+										stockDisponible <- Falso 
+									FinSi
+									
+									Si stockDisponible = Falso Entonces
+										Escribir "¡Lo sentimos! No contamos con suficiente stock para esa cantidad."
+										Escribir "Presione una tecla para continuar..."
+										Esperar Tecla
+									Sino
+										Segun opPan Hacer
+											"1":
+												subtotal <- numeroPedidos * 1.00
+												cPanQueso <- cPanQueso + numeroPedidos
+											"2":
+												subtotal <- numeroPedidos * 0.15
+												cEnrollado <- cEnrollado + numeroPedidos
+											"3":
+												subtotal <- numeroPedidos * 0.50
+												cCroissant <- cCroissant + numeroPedidos
+										Fin Segun
+										
+										facturaTotal <- facturaTotal + subtotal
+										Escribir "¡Excelente elección! Tu saldo actual es de: $", facturaTotal
+										Escribir "¿Desea ir directo a pagar su orden? (S/N)"
+										Leer irAPagar
+										
+										Si irAPagar = "s" O irAPagar = "S" Entonces
+											opPan <- "4"   
+											opciones <- "4" 
+										Sino
+											Escribir "Presiona cualquier tecla para seguir pidiendo..."
+											Esperar Tecla
+										FinSi
+									FinSi
+								"4":
+									// Salida limpia al menú principal
+								De Otro Modo:
 									Escribir "¡Ups! Esa opción no la tenemos. Intenta con los números del menú."
 									Escribir "Presiona una tecla para reintentar..."
 									Esperar Tecla
-								FinSi
-							FinSi
+							FinSegun
 						Hasta Que opPan = "4"
 						
 					"2":
 						Repetir
 							Borrar Pantalla
-							Escribir "******** MENU BEBIDAS ********"
-							Escribir "1. Café Pasado___________$0.75"
-							Escribir "2. Jugo Natural__________$1.25"
-							Escribir "3. Chocolate Caliente____$1.50"
-							Escribir "4. VOLVER"
-							Escribir "Ingresa la opción:"
+							Escribir bordeHorizontalSuperior
+							Escribir lineaV, "               M E N Ú  D E  B E B I D A S              ", lineaV
+							Escribir lineaSeparadoraCentral
+							Escribir lineaV, "                                                        ", lineaV
+							Escribir lineaV, "    [1] > Café Pasado __________________________ $0.75  ", lineaV
+							Escribir lineaV, "    [2] > Jugo Natural _________________________ $1.25  ", lineaV
+							Escribir lineaV, "    [3] > Chocolate Caliente ___________________ $1.50  ", lineaV
+							Escribir lineaV, "    [4] < VOLVER AL MENÚ PRINCIPAL                      ", lineaV
+							Escribir lineaV, "                                                        ", lineaV
+							Escribir bordeHorizontalInferior
+							Escribir " Ingresa la opción: " Sin Saltar
 							Leer opBebida
 							
-							Si opBebida >= "1" Y opBebida <= "3" Entonces
-								Escribir "Cantidad:"
-								Leer numeroPedidos
-								Segun opBebida Hacer
-									"1":
-										subtotal <- numeroPedidos * 0.75
-										cCafe <- cCafe + numeroPedidos
-									"2":
-										subtotal <- numeroPedidos * 1.25
-										cJugo <- cJugo + numeroPedidos
-									"3":
-										subtotal <- numeroPedidos * 1.50
-										cChocolate <- cChocolate + numeroPedidos
-								Fin Segun
-								
-								facturaTotal <- facturaTotal + subtotal
-								Escribir "¡Perfecto! Agregado a tu cuenta. Saldo: $", facturaTotal
-								Escribir "¿Desea ir directo a pagar su orden? (S/N)"
-								Leer irAPagar
-								
-								Si irAPagar = "s" O irAPagar = "S" Entonces
-									opBebida <- "4"   
-									opciones <- "4" 
-								Sino
-									Escribir "Presiona cualquier tecla para seguir pidiendo..."
-									Esperar Tecla
-								FinSi
-							Sino
-								Si opBebida <> "4" Entonces
+							Segun opBebida Hacer
+								"1", "2", "3":
+									Escribir "Cantidad:"
+									Leer numeroPedidos
+									Segun opBebida Hacer
+										"1":
+											subtotal <- numeroPedidos * 0.75
+											cCafe <- cCafe + numeroPedidos
+										"2":
+											subtotal <- numeroPedidos * 1.25
+											cJugo <- cJugo + numeroPedidos
+										"3":
+											subtotal <- numeroPedidos * 1.50
+											cChocolate <- cChocolate + numeroPedidos
+									Fin Segun
+									
+									facturaTotal <- facturaTotal + subtotal
+									Escribir "¡Perfecto! Agregado a tu cuenta. Saldo: $", facturaTotal
+									Escribir "¿Desea ir directo a pagar su orden? (S/N)"
+									Leer irAPagar
+									
+									Si irAPagar = "s" O irAPagar = "S" Entonces
+										opBebida <- "4"   
+										opciones <- "4" 
+									Sino
+										Escribir "Presiona cualquier tecla para seguir pidiendo..."
+										Esperar Tecla
+									FinSi
+								"4":
+								De Otro Modo:
 									Escribir "Esa bebida no está en la lista. Intenta de nuevo."
 									Escribir "Presiona una tecla para reintentar..."
 									Esperar Tecla
-								FinSi
-							FinSi
+							FinSegun
 						Hasta Que opBebida = "4"
 						
 					"3":
 						Repetir
 							Borrar Pantalla
-							Escribir "********** POSTRES ***********"
-							Escribir "1. Porción de Torta......$1.00"
-							Escribir "2. VOLVER"
-							Escribir "Ingresa la opción:"
+							Escribir bordeHorizontalSuperior
+							Escribir lineaV, "               M E N Ú  D E  P O S T R E S              ", lineaV
+							Escribir lineaSeparadoraCentral
+							Escribir lineaV, "                                                        ", lineaV
+							Escribir lineaV, "    [1] > Porción de Torta _____________________ $1.00  ", lineaV
+							Escribir lineaV, "    [2] < VOLVER AL MENÚ PRINCIPAL                      ", lineaV
+							Escribir lineaV, "                                                        ", lineaV
+							Escribir bordeHorizontalInferior
+							Escribir " Ingresa la opción: " Sin Saltar
 							Leer opPostre
 							
 							Segun opPostre Hacer
@@ -321,7 +337,7 @@ Proceso DulceTentacion_Kiosko
 										Esperar Tecla
 									FinSi
 								"2":
-									Escribir "Regresando al menú principal..."
+									// Salida limpia al menú principal
 								De Otro Modo:
 									Escribir "Opción de postre no válida."
 									Escribir "Presiona una tecla para reintentar..."
