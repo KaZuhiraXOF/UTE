@@ -86,6 +86,7 @@ Proceso DulceTentacion_Kiosko
 	conectorDer <- "|"
 	bloque      <- "#"
 	
+	
 	Borrar Pantalla
 	Escribir ""
 	Escribir "  Cargando interfaz de la tienda..."
@@ -117,6 +118,7 @@ Proceso DulceTentacion_Kiosko
 	bordeHorizontalInferior <- esqInfIzq + bordeHorizontal + esqInfDer
 	lineaSeparadoraCentral  <- conectorIzq + separadorHorizontal + conectorDer
 	//**********************************************************
+	
 	Borrar Pantalla
 	Escribir ""
 	Escribir "  Cargando interfaz de la tienda..."
@@ -458,7 +460,7 @@ Proceso DulceTentacion_Kiosko
 											cajaTarjeta <- cajaTarjeta + totalConDescuento
 											pagoCompletado <- Verdadero
 										"3":
-											// VISUAL: Código QR simulado dinámico para la consola
+
 											Borrar Pantalla
 											Escribir " ??????????????????????????????????????????????????????"
 											Escribir " ?       ESCANEA EL CÓDIGO PARA PROCEDER AL PAGO      ?"
