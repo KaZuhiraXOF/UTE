@@ -1,4 +1,9 @@
+'''
+No uso los parámetros como argumentos porque esos emplean, o devuelven, tuplas por lo que
+#al ser un tema que no hemos visto, no lo voy a emplear
+'''
 #ESto solo es una prueba para ver si esto funciona, no recuerdo si el clean code lo permite
+#saldo_actual aqui funciona como una variable de uso global al emplearse en factura_total 
 def mostrar_menu_principal(saldo_actual):
     print("======= MENU PRINCIPAL =======")
     print("1. Salchipapas")
