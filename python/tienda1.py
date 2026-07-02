@@ -73,6 +73,7 @@ while opcion_inicial != "3":
 
                 match opciones:
                     case "1":
+                        op_salchipapa = "0"
                         while op_salchipapa != "4":
                             print("==============================")
                             print("***** MENU SALCHIPAPAS *******")
@@ -95,127 +96,71 @@ while opcion_inicial != "3":
                                 if op_salchipapa != "4":
                                     print("Opción inválida, intente de nuevo...")
                     case "2":
+                        op_bebida = "0"
+                        while op_bebida != "4":
+                            print("==============================")
+                            print("******** MENU BEBIDAS ********")
+                            print("1. Cola 500ml____________$0.50")
+                            print("2. Agua 500ml____________$0.70")
+                            print("3. Limonada (Vaso)_______$1.25")
+                            print("4. VOLVER")
+                            op_bebida = input()
+
+                            if op_bebida >= "1" and op_bebida <= "3":
+                                print("Cantidad:")
+                                numero_pedidos = int(input())
+                                match op_bebida:
+                                    case "1": precio = 0.50
+                                    case "2": precio = 0.70
+                                    case "3": precio = 1.25
+
+                                subtotal = calcular_subtotal_producto(precio)
+                                factura_total = factura_total + subtotal
+                                print("Agregado. Subtotal: $", factura_total)
+                            else:
+                                if op_bebida != "4":
+                                    print("Opción inválida, intente de nuevo...")
                     case "3":
-                
+                        op_postre = "0"
+                        while op_postre != "2":
+                            print("==============================")
+                            print("********** POSTRES ***********")
+                            print("1. Helado de Salcedo...$1.00")
+                            print("2. VOLVER")
+                            op_postre = input()
 
-
-
-    if opcion_inicial == "1" or opcion_inicial == "2":
-        opciones = "0"
-        while opciones != "5":
-            print("======= MENU PRINCIPAL =======")
-            print("1. Salchipapas")
-            print("2. Bebidas")
-            print("3. Postres")
-            print("4. GENERAR PAGO / RESUMEN")
-            print("5. REGRESAR (Inicio)")
-            print("==============================")
-            print("   SALDO ACTUAL: $", factura_total)
-            print("==============================")
-            print("Seleccione una categoria:")
-            opciones = input()
-
-            if opciones == "1":
-                op_salchipapa = "0"
-                
-                
-            elif opciones == "2":
-                op_bebida = "0"
-                while op_bebida != "4":
-                    print("==============================")
-                    print("******** MENU BEBIDAS ********")
-                    print("1. Cola 500ml____________$0.50")
-                    print("2. Agua 500ml____________$0.70")
-                    print("3. Limonada (Vaso)_______$1.25")
-                    print("4. VOLVER")
-                    op_bebida = input()
-
-                    if op_bebida >= "1" and op_bebida <= "3":
-                        print("Cantidad:")
-                        numero_pedidos = int(input())
-                        if op_bebida == "1":
-                            subtotal = numero_pedidos * 0.50
-                        if op_bebida == "2":
-                            subtotal = numero_pedidos * 0.70
-                        if op_bebida == "3":
-                            subtotal = numero_pedidos * 1.25
-
-                        factura_total = factura_total + subtotal
-                        print("Agregado. Subtotal: $", factura_total)
-                    else:
-                        if op_bebida != "4":
-                            print("Opción inválida, intente de nuevo...")
-
-            elif opciones == "3":
-                op_postre = "0"
-                while op_postre != "2":
-                    print("==============================")
-                    print("********** POSTRES ***********")
-                    print("1. Helado de Salcedo...$1.00")
-                    print("2. VOLVER")
-                    op_postre = input()
-
-                    if op_postre == "1":
-                        print("Cantidad:")
-                        numero_pedidos = int(input())
-                        factura_total = factura_total + (numero_pedidos * 1.00)
-                        print("Agregado. Subtotal: $", factura_total)
-                    else:
-                        if op_postre == "2":
-                            print("Saliendo del menú...")
+                            match op_postre:
+                                case "1":
+                                    subtotal = calcular_subtotal_producto(1.00)
+                                    factura_total = factura_total + subtotal
+                                    print("Agregado. Subtotal: $", factura_total)
+                                case "2":
+                                    print("Saliendo del menú...")
+                                case _:
+                                    print("Opción inválida, intente de nuevo...")
+                    case "4":
+                        if factura_total > 0:
+                            para_llevar = (opcion_inicial == "1")
+                            resultado_pago = aplicar_descuento_y_pago(factura_total, para_llevar)
+                            
+                            pago_exitoso = resultado_pago[0]
+                            factura_total = resultado_pago[1]
+                            
+                            if pago_exitoso:
+                                opciones = "5"
                         else:
-                            print("Opción inválida, intente de nuevo...")
-
-            elif opciones == "4":
-                if factura_total > 0:
-                    print("--- RESUMEN DE ORDEN ---")
-                    
-                    # Aquí aplicamos el cargo por empaque si es para llevar
-                    if opcion_inicial == "1":
-                        factura_total = factura_total + 0.25
-                        print("Cargo por empaque (Para llevar): $0.25")
-                    
-                    print("Subtotal: $", factura_total)
-                    descuento = 0.0
-                    if factura_total >= 30:
-                        descuento = 0.25
-                    else:
-                        if factura_total >= 10:
-                            descuento = 0.10
-
-                    total_con_descuento = factura_total - (factura_total * descuento)
-                    print("Descuento: ", (descuento * 100), "%")
-                    print("TOTAL FINAL: $", total_con_descuento)
-                    print("Confirmar pago y generar ticket? (S/N)")
-                    confirmacion = input()
-                    if confirmacion == "s" or confirmacion == "S":
-                        print("Ticket impreso con exito. Gracias!")
-                        factura_total = 0.0
-                        opciones = "5"
-                    else:
-                        # Si cancela, le restamos los 25 ctvs para que el carrito no se quede con el cargo duplicado si vuelve a entrar a pagar
-                        if opcion_inicial == "1":
-                            factura_total = factura_total - 0.25
-                        print("Orden mantenida. Puedes continuar pidiendo...")
-                else:
-                    print("El carrito está vacío...")
-
-            elif opciones == "5":
-                if factura_total > 0:
-                    print("Seguro que desea volver? Se perdera su orden de $", factura_total, " (S/N)")
-                    confirmacion = input()
-                    if confirmacion == "s" or confirmacion == "S":
-                        factura_total = 0.0
-                    else:
-                        opciones = "0"
-
-            else:
-                print("Opción inválida, intente de nuevo...")
-
-    else:
-        if opcion_inicial != "3":
-            print("Opción inválida, intente de nuevo...")
-        else:
+                            print("El carrito está vacío...")
+                    case "5":
+                        if factura_total > 0:
+                            print("Seguro que desea volver? Se perdera su orden de $", factura_total, " (S/N)")
+                            confirmacion = input()
+                            if confirmacion == "s" or confirmacion == "S":
+                                factura_total = 0.0
+                            else:
+                                opciones = "0"
+                    case _:
+                        print("Opción inválida, intente de nuevo...")
+        case "3":
             if factura_total > 0:
                 print("ADVERTENCIA: Hay un pedido pendiente de $", factura_total)
                 print("Desea salir y borrar la orden? (S/N)")
@@ -225,3 +170,6 @@ while opcion_inicial != "3":
 
             if opcion_inicial == "3":
                 print("Gracias por visitarnos!!!")
+        #Este solo sirve por si ninguna opción cuadra.
+        case _:
+            print("Opción inválida, intente de nuevo...")
