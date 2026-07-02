@@ -1,3 +1,52 @@
+#ESto solo es una prueba para ver si esto funciona, no recuerdo si el clean code lo permite
+def mostrar_menu_principal(saldo_actual):
+    print("======= MENU PRINCIPAL =======")
+    print("1. Salchipapas")
+    print("2. Bebidas")
+    print("3. Postres")
+    print("4. GENERAR PAGO / RESUMEN")
+    print("5. REGRESAR (Inicio)")
+    print("==============================")
+    print("   SALDO ACTUAL: $", saldo_actual)
+    print("==============================")
+    print("Seleccione una categoria:")
+
+def calcular_subtotal_producto(precio_unitario):
+    print("Cantidad:")
+    cantidad = int(input())
+    return cantidad * precio_unitario
+
+def aplicar_descuento_y_pago(total, es_para_llevar):
+    print("--- RESUMEN DE ORDEN ---")
+    
+    if es_para_llevar:
+        total = total + 0.25
+        print("Cargo por empaque (Para llevar): $0.25")
+    
+    print("Subtotal: $", total)
+    descuento = 0.0
+    if total >= 30:
+        descuento = 0.25
+    else:
+        if total >= 10:
+            descuento = 0.10
+
+    total_con_descuento = total - (total * descuento)
+    print("Descuento: ", (descuento * 100), "%")
+    print("TOTAL FINAL: $", total_con_descuento)
+    
+    print("Confirmar pago y generar ticket? (S/N)")
+    confirmacion = input()
+    
+    if confirmacion == "s" or confirmacion == "S":
+        print("Ticket impreso con exito. Gracias!")
+        return [True, 0.0]
+    else:
+        if es_para_llevar:
+            total = total - 0.25
+        print("Orden mantenida. Puedes continuar pidiendo...")
+        return [False, total]
+
 factura_total = 0.0
 opcion_inicial = "0"
 
@@ -9,6 +58,47 @@ while opcion_inicial != "3":
     print("2. PARA COMER")
     print("3. SALIR DEL SISTEMA")
     opcion_inicial = input()
+
+    '''
+    match es una funcion exclusiva de python en sus versiones
+    mayores a la 3.10. Si esta fuera de esa versión no funcionará
+    en ese caso se usan if, elif, else... No olvidarme.
+    '''
+    match opcion_inicial:
+        case "1" | "2":
+            opciones = 0
+            while opciones != "5":
+                mostrar_menu_principal(factura_total)
+                opciones = input()
+
+                match opciones:
+                    case "1":
+                        while op_salchipapa != "4":
+                            print("==============================")
+                            print("***** MENU SALCHIPAPAS *******")
+                            print("1. Salchi guagua_________$1.25")
+                            print("2. Salchi normal_________$1.75")
+                            print("3. Salchi volquetera_____$2.75")
+                            print("4. VOLVER")
+                            op_salchipapa = input()
+
+                            if op_salchipapa >= "1" and op_salchipapa <= "3":
+                                match op_salchipapa:
+                                    case "1": precio = 1.25
+                                    case "2": precio = 1.75
+                                    case "3": precio = 2.75
+
+                                subtotal = calcular_subtotal_producto(precio)
+                                factura_total = factura_total + subtotal
+                                print("Agregado. Subtotal: $", factura_total)
+                            else:
+                                if op_salchipapa != "4":
+                                    print("Opción inválida, intente de nuevo...")
+                    case "2":
+                    case "3":
+                
+
+
 
     if opcion_inicial == "1" or opcion_inicial == "2":
         opciones = "0"
@@ -27,31 +117,8 @@ while opcion_inicial != "3":
 
             if opciones == "1":
                 op_salchipapa = "0"
-                while op_salchipapa != "4":
-                    print("==============================")
-                    print("***** MENU SALCHIPAPAS *******")
-                    print("1. Salchi guagua_________$1.25")
-                    print("2. Salchi normal_________$1.75")
-                    print("3. Salchi volquetera_____$2.75")
-                    print("4. VOLVER")
-                    op_salchipapa = input()
-
-                    if op_salchipapa >= "1" and op_salchipapa <= "3":
-                        print("Cantidad:")
-                        numero_pedidos = int(input())
-                        if op_salchipapa == "1":
-                            subtotal = numero_pedidos * 1.25
-                        if op_salchipapa == "2":
-                            subtotal = numero_pedidos * 1.75
-                        if op_salchipapa == "3":
-                            subtotal = numero_pedidos * 2.75
-
-                        factura_total = factura_total + subtotal
-                        print("Agregado. Subtotal: $", factura_total)
-                    else:
-                        if op_salchipapa != "4":
-                            print("Opción inválida, intente de nuevo...")
-
+                
+                
             elif opciones == "2":
                 op_bebida = "0"
                 while op_bebida != "4":
